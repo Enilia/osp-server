@@ -1,7 +1,7 @@
-import * as Express from 'express'
 import { ServerLoader, ServerSettings } from '@tsed/common'
 import path from 'path'
 import { json } from 'body-parser'
+import '@tsed/socketio'
 
 @ServerSettings({
   rootDir: path.resolve(__dirname),
