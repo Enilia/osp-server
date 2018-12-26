@@ -6,6 +6,9 @@ import '@tsed/socketio'
 @ServerSettings({
   rootDir: path.resolve(__dirname),
   acceptMimes: ['application/json'],
+  mount: {
+    '/api': '${rootDir}/controllers/**/*.ts'
+  },
 })
 export class Server extends ServerLoader {
 
