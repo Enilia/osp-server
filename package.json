@@ -21,7 +21,6 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "class-validator": "^0.9.1",
     "compression": "^1.7.3",
     "express": "^4.16.4"
   },
