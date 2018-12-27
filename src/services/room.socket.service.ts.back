@@ -1,0 +1,43 @@
+import { SocketService, Nsp, Input } from '@tsed/socketio'
+import { Room } from '../models/Room.model'
+
+// @SocketService()
+// export class RoomService {
+
+//   @Nsp
+//   private nsp: SocketIO.Namespace
+
+//   private store = new Map()
+
+//   private uid() {
+//     let a = 0
+//     let b = ''
+//     for(
+//       ; a++ < 6
+//       ; b += (8 ^ Math.random() * 16).toString(16)
+//     ) {}
+//     return b
+//   }
+
+//   async create(): Promise<Room> {
+//     const uid = this.uid()
+//     if( this.store.has(uid) ) return await this.create()
+
+//     const room = new Room( uid )
+//     this.store.set( uid, room )
+
+//     return room
+//   }
+
+//   // async delete( uid: string ): Promise<void> {
+//   //   this.store.delete( uid )
+//   // }
+
+//   @Input('join')
+//   join( uid: string ) {
+//     const room = this.store.get( uid )
+//     // if( !room ) throw new Error('invalid room')
+
+//   }
+
+// }
