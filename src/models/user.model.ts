@@ -1,8 +1,8 @@
 
 export class User {
 
-  id: string
+  id: string = ''
 
-  nickname: string
+  nickname: string = ''
 
 }
