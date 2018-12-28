@@ -1,12 +1,9 @@
 import * as SocketIO from 'socket.io'
-import { SocketService, Nsp, IO, Input, Args, Socket, SocketSession, Emit } from '@tsed/socketio'
-import { User } from '../models/user.model'
-import { UIDService } from './uid.service'
+import { SocketService, Nsp, Input, Args, Socket } from '@tsed/socketio'
+import { UserStorageService } from './user.storage.service';
 
-const SESSION_USER = 'user'
 const EVENT_RENAME_USER = 'renameUser'
 const EVENT_USER_RENAMED = 'USER_RENAMED'
-const EVENT_USER_UPDATED = 'USER_UPDATED'
 
 @SocketService()
 export class UserService {
@@ -14,38 +11,26 @@ export class UserService {
   @Nsp
   private nsp: SocketIO.Namespace
 
-  store = new Map()
-
   constructor(
-    private uidService: UIDService,
+    private userStorageService: UserStorageService,
   ) {}
 
-  private createUser() {
-    const user = new User()
-    user.id = this.uidService.uid()
-    return user
-  }
-
-  $onConnection(@Socket socket: SocketIO.Socket, @SocketSession session: SocketSession) {
-    const user = this.createUser()
-    session.set( SESSION_USER, user )
-    socket.emit(EVENT_USER_UPDATED, user)
-  }
-
-  $onDisconnect(@Socket socket: SocketIO.Socket) {}
-
   @Input(EVENT_RENAME_USER)
-  @Emit(EVENT_USER_RENAMED)
-  async renameUser(@Args(0) nickname: string, @SocketSession session: SocketSession) {
-    const user: User = session.get( SESSION_USER )
+  public async renameUser(
+    @Args(0) nickname: string,
+    @Socket socket: SocketIO.Socket,
+  ) {
+    const user = await this.userStorageService.get( socket )
+    if( !user ) return
 
     nickname = nickname.slice(0, 20)
     nickname = nickname.replace(/[^a-zA-Z0-9]/g, '-')
 
     user.nickname = nickname
-    session.set( SESSION_USER, user )
 
-    return nickname
+    this.userStorageService.save( socket, user )
+
+    socket.emit( EVENT_USER_RENAMED, user.nickname )
   }
 
 }
