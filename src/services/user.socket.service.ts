@@ -22,7 +22,7 @@ export class UserService {
 
   private createUser() {
     const user = new User()
-    user.id = user.nickname = this.uidService.uid()
+    user.id = this.uidService.uid()
     return user
   }
 
@@ -38,8 +38,8 @@ export class UserService {
   @Emit(EVENT_USER_RENAMED)
   async renameUser(@Args(0) nickname: string, @SocketSession session: SocketSession) {
     const user: User = session.get( SESSION_USER )
-    if( nickname.length > 20 ) return user.nickname
 
+    nickname = nickname.slice(0, 20)
     nickname = nickname.replace(/[^a-zA-Z0-9]/g, '-')
 
     user.nickname = nickname
