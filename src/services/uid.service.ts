@@ -8,7 +8,7 @@ export class UIDService {
     let b = ''
     for(
       ; a++ < 6
-      ; b += (8 ^ Math.random() * 16).toString(16)
+      ; b += (0 ^ Math.random() * 36).toString(36)
     ) {}
     return b
   }
