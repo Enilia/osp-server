@@ -2,28 +2,21 @@ import * as SocketIO from 'socket.io'
 import { User } from '../models/user.model'
 import { UIDService } from './uid.service'
 import { Service } from '@tsed/common'
+import { StorageService } from '../classes/storage.class';
 
 @Service()
-export class UserStorageService {
-
-  private store = new Map()
+export class UserStorageService extends StorageService {
 
   constructor(
-    private uidService: UIDService,
-  ) {}
+    protected uidService: UIDService,
+  ) {
+    super( uidService )
+  }
 
   private createUser(): User {
     const user = new User()
     user.id = this.getUniqueId()
     return user
-  }
-
-  private getUniqueId(): string {
-    let id: string
-    do {
-      id = this.uidService.uid()
-    } while( this.store.has( id ) )
-    return id
   }
 
   public async create( socket: SocketIO.Socket ): Promise<User> {
