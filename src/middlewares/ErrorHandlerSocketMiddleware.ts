@@ -1,6 +1,6 @@
 import { SocketMiddlewareError, SocketErr, SocketEventName, Socket } from '@tsed/socketio'
 
-const EVENT_ERROR = 'EVENT_ERROR'
+const EVENT_ERROR = 'ERROR'
 
 @SocketMiddlewareError()
 export class ErrorHandlerSocketMiddleware {

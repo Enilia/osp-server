@@ -1,8 +1,10 @@
 import { UIDService } from '../services/uid.service'
 
-export abstract class StorageService {
+export abstract class StorageService<V> {
 
-  protected store = new Map()
+  protected store = new Map<string, V>()
+
+  get size() { return this.store.size }
 
   constructor(
     protected uidService: UIDService,
