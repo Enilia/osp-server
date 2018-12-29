@@ -25,7 +25,7 @@ export class RoomService {
 
   public async create(): Promise<Room> {
     const room = await this.roomStorageService.create()
-    console.log(`room created: ${room.id}`)
+    console.log(`room created: ${room.id}`, `active rooms: ${this.roomStorageService.size}`)
     return room
   }
 
@@ -51,7 +51,7 @@ export class RoomService {
 
   public delete( room: Room ): void {
     this.roomStorageService.delete( room.id )
-    console.log(`room ${room.id} deleted`)
+    console.log(`room ${room.id} deleted`, `active rooms: ${this.roomStorageService.size}`)
   }
 
 }
