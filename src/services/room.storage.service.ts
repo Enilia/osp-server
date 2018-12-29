@@ -23,7 +23,9 @@ export class RoomStorageService extends StorageService<Room> {
   }
 
   public async get( id: string ): Promise<Room> {
-    return this.store.get( id )
+    const room = this.store.get( id )
+    if( !room ) throw new Error(`room not found: '${id}'`)
+    return room
   }
 
   public async save( room: Room ): Promise<Room> {

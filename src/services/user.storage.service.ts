@@ -26,7 +26,9 @@ export class UserStorageService extends StorageService<User> {
   }
 
   public async get( socketid: string ): Promise<User> {
-    return this.store.get( socketid )
+    const user = this.store.get( socketid )
+    if( !user ) throw new Error(`user not found: '${socketid}'`)
+    return user
   }
 
   public async save( user: User ): Promise<User> {
