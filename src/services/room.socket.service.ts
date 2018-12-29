@@ -7,6 +7,7 @@ import { ConverterService, Service } from '@tsed/common'
 
 const EVENT_ROOM_USER_JOINED = 'ROOM_USER_JOINED'
 const EVENT_ROOM_USER_LEFT = 'ROOM_USER_LEFT'
+const EVENT_ROOM_USER_RENAMED = 'ROOM_USER_RENAMED'
 
 @SocketService()
 export class RoomService {
@@ -41,6 +42,11 @@ export class RoomService {
     if( !room.hasClients ) {
       this.delete( room )
     }
+  }
+
+  public userRenamed( user: User ): void {
+    if( !user.room ) return
+    this.nsp.to( user.room.id ).emit( EVENT_ROOM_USER_RENAMED, this.converterService.serialize( user ) )
   }
 
   public delete( room: Room ): void {

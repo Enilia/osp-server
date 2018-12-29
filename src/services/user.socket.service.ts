@@ -6,13 +6,16 @@ import { RoomService } from './room.socket.service'
 import { ConverterService } from '@tsed/common'
 import { Room } from '../models/Room.model'
 import { RoomStorageService } from './room.storage.service'
+import { User } from '../models/user.model'
 
 const EVENT_RENAME_USER = 'renameUser'
 const EVENT_CREATE_ROOM = 'createRoom'
 const EVENT_JOIN_ROOM = 'joinRoom'
+const EVENT_LEAVE_ROOM = 'leaveRoom'
 
 const EVENT_USER_RENAMED = 'USER_RENAMED'
 const EVENT_ROOM_JOINED = 'ROOM_JOINED'
+const EVENT_ROOM_LEFT = 'ROOM_LEFT'
 
 @SocketService()
 @SocketUseAfter(ErrorHandlerSocketMiddleware)
@@ -44,6 +47,8 @@ export class UserService {
     user.nickname = nickname
 
     this.userStorageService.save( user )
+
+    this.roomService.userRenamed( user )
 
     return user.nickname
   }
@@ -79,20 +84,37 @@ export class UserService {
     return this.converterService.serialize(await this._joinRoom( socket, room ))
   }
 
+  @Input(EVENT_LEAVE_ROOM)
+  @Emit(EVENT_ROOM_LEFT)
+  public async leaveRoom(
+    @Socket socket: SocketIO.Socket,
+  ) {
+
+    await this._leaveRoom( socket )
+
+    return
+  }
+
   private async _joinRoom( socket: SocketIO.Socket, room: Room ) {
     const user = await this.userStorageService.get( socket.id )
 
-    if( user.room ) {
-      socket.leave( user.room.id )
-      this.roomService.leave( user.room, user )
-      delete user.room
-    }
+    await this._leaveRoom( socket, user )
 
     this.roomService.join( room, user )
     socket.join( room.id )
     user.room = room
 
     return room
+  }
+
+  private async _leaveRoom( socket: SocketIO.Socket, user?: User ) {
+    user = user || await this.userStorageService.get( socket.id )
+
+    if( user.room ) {
+      socket.leave( user.room.id )
+      this.roomService.leave( user.room, user )
+      delete user.room
+    }
   }
 
 }
