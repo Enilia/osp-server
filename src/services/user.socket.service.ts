@@ -85,14 +85,13 @@ export class UserService {
   }
 
   @Input(EVENT_LEAVE_ROOM)
-  @Emit(EVENT_ROOM_LEFT)
   public async leaveRoom(
     @Socket socket: SocketIO.Socket,
   ) {
 
     await this._leaveRoom( socket )
 
-    return
+    socket.emit( EVENT_ROOM_LEFT )
   }
 
   private async _joinRoom( socket: SocketIO.Socket, room: Room ) {
