@@ -11,6 +11,9 @@ export class Room {
   get clients() { return Array.from(this.users) }
 
   @Property()
+  get owner() { return this.users.values().next().value }
+
+  @Property()
   public id: string
 
   constructor(
