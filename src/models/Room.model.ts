@@ -22,11 +22,11 @@ export class Room {
     this.id = id
   }
 
-  join( user: User ) {
+  join( user: User ): void {
     this.users.add( user )
   }
 
-  leave( user: User ) {
+  leave( user: User ): void {
     this.users.delete( user )
   }
 
